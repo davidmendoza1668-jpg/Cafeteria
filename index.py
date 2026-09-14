@@ -136,7 +136,51 @@ def actualizar_stock(productos, id_producto, cantidad):
 
     return True
 
+def registrar_compra(productos, compras, proveedor, id_producto, cantidad):
+    # Buscar el producto
+    producto = buscar_producto(productos, id_producto)
 
+    if producto is None:
+        print("Producto no encontrado.")
+        return False
+
+    # Validar cantidad
+    if cantidad <= 0:
+        print("La cantidad debe ser mayor que cero.")
+        return False
+
+    # Aumentar el stock
+    if actualizar_stock(productos, id_producto, cantidad):
+        # Registrar la compra
+        compras.append({
+            "id": len(compras) + 1,
+            "proveedor": proveedor,
+            "id_producto": id_producto,
+            "producto": producto["nombre"],
+            "cantidad": cantidad
+        })
+
+        print("\nCompra registrada correctamente.")
+        print(f"Producto: {producto['nombre']}")
+        print(f"Cantidad comprada: {cantidad}")
+        print(f"Stock actual: {producto['stock']}")
+
+        return True
+
+    return False
+def listar_compras(compras):
+    print("\n--- HISTORIAL DE COMPRAS ---")
+
+    if not compras:
+        print("No hay compras registradas.")
+        return
+
+    for compra in compras:
+        print(f"\nID Compra: {compra['id']}")
+        print(f"Proveedor: {compra['proveedor']}")
+        print(f"Producto: {compra['producto']}")
+        print(f"ID Producto: {compra['id_producto']}")
+        print(f"Cantidad: {compra['cantidad']}")
 def main():
     rol_usuario = input("Ingresa tu rol (Administrador / Cajero): ").strip().capitalize()
     
